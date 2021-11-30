@@ -1,5 +1,5 @@
 import { Avatar } from "@chakra-ui/avatar";
-import { Box, Flex, Grid } from "@chakra-ui/layout";
+import { Box, Center, Flex, Grid, Heading } from "@chakra-ui/layout";
 import {
   query,
   where,
@@ -9,16 +9,11 @@ import {
   getFirestore,
   getDocs,
 } from "firebase/firestore";
-import {
-  User,
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-} from "firebase/auth";
+import { User, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useCollectionData, useDocument } from "react-firebase-hooks/firestore";
 import { auth, db } from "../firebase";
+import { Button } from "@chakra-ui/button";
 
 const saveUserToFirestore = async (user: User) => {
   await setDoc(doc(db, "users", user.uid), {
@@ -30,7 +25,7 @@ const saveUserToFirestore = async (user: User) => {
 
 export const SignInScreen = () => {
   const [user] = useAuthState(auth);
-  if (!user) {
+  if (user) {
     return null;
   }
 
@@ -45,20 +40,14 @@ export const SignInScreen = () => {
     }
   };
 
-  const signout = () => {
-    auth.signOut();
-  };
-
-  // const test = async () => {
-  //   await getGroupsForUser(user.uid);
-  // };
-
   return (
-    <>
-      <div>{user ? "logged in" + user.email : "logged out"}</div>
-      <a onClick={signin}>Sign In</a>
-      <a onClick={signout}>Sign Out</a>
-      {/* <a onClick={test}>Test</a> */}
-    </>
+    <Center bgColor="gray.50" h="100vh" flexDir="column">
+      <Heading as="h1" mb="8">
+        Think About
+      </Heading>
+      <Button onClick={signin} colorScheme="blue">
+        Sign In with Google
+      </Button>
+    </Center>
   );
 };
